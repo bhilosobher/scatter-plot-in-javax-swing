@@ -147,7 +147,7 @@ public class Controller {
 				Bond.setMinY(values[5]);
 			}
 
-			// now update the graphics (scatter plot) based on the new data
+			// when a new item is selected, update the graphics (scatter plot) based on the new data
 			bond_view.scatterPlot.repaint();
 		}
 	}
