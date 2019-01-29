@@ -41,8 +41,11 @@ public class Controller {
 
 				// read transaction data from file then store it
 				bond_model.readBondData(selectedFile.getAbsolutePath());
+				if(bond_model.getBonds()!=null) {
+					
+				}
 				String[] columns = bond_model.getColumnNames();
-
+				
 				if (bond_view.select1 != null) {
 					bond_view.bottomPanel.remove(bond_view.select1);
 					bond_view.bottomPanel.remove(bond_view.select2);
@@ -54,7 +57,6 @@ public class Controller {
 				bond_view.addComboBoxListerners(new ComboBoxListener());
 
 				// set the max and min X and Y values to those in the YIELD and DAYS_TO_MATURITY
-				// columns
 				Integer[] values = bond_model.findMaxMin();
 				Bond.setMaxX(values[0]);
 				Bond.setMinX(values[1]);
@@ -72,6 +74,8 @@ public class Controller {
 		public void mousePressed(MouseEvent event) {
 			int x = event.getX();
 			int y = event.getY();
+			//when the user clicks somewhere, see if they clicked a dot; if they did, update
+			//label with bond information 
 			String description = scatterPlot.selectDot(x, y);
 			bond_view.transactionDetail.setText(description);
 		}
@@ -100,19 +104,22 @@ public class Controller {
 	class ComboBoxListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			//see what the user selected in the combo voxes
 			String selectedItem1 = (String) bond_view.select1.getSelectedItem();
 			String selectedItem2 = (String) bond_view.select2.getSelectedItem();
+			//see what the names of the columns are
 			String[] columns = bond_model.getColumnNames();
 			Integer[] values = bond_model.findMaxMin();
-
+			
+			//compare selected item with name of column; set value from selected column
+			//as the value to be painted in the scatterplot
 			if (selectedItem1.equals(columns[0])) {
 				for (Bond b : bond_model.getBonds()) {
 					b.setXCoordinate(b.getYield());
 				}
 				Bond.setMaxX(values[0]);
 				Bond.setMinX(values[1]);
-				//here do magic  
+				
 			} else if (selectedItem1.equals(columns[1])) {
 				for (Bond b : bond_model.getBonds()) {
 					b.setXCoordinate(b.getDaysToMaturity());
